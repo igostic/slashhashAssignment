@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script>
+
+    <!-- include summernote css/js-->
+    <link href="/public/summernote/summernote.css" rel="stylesheet">
+
+    <style media="screen">
+    #wrapper{
+        width:90%;
+        margin:auto;
+    }
+    </style>
+</head>
+<body>
+    <div class="row" id="wrapper">
+        <div id="summernote">Hello Summernote</div>
+    </div>
+    <script src="/public/summernote/summernote.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        // $('#summernote').summernote();
+
+        $('#summernote').summernote({
+            height: 590,
+            focus: true,
+            callbacks: {
+                onImageUpload : function(file, editor, welEditable) {
+                    console.log('editor',editor);
+                    saveFile(file[0]);
+                }
+            }
+        });
+
+        function saveFile(file){
+            console.log(file);
+           
+            data = new FormData();
+            data.append("file", file);
+
+            $.ajax({
+                data: data,
+                type: "POST",
+                url: "/imageUpload",
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function(url) {
+                    var $summernote = $("#summernote");
+                    var imgPath = url.name+"."+url.ext;
+                    var img = $("<img src='/uploaded/"+imgPath+"'>")[0];
+                    $summernote.summernote('insertNode', img);
+                
+                }
+            });
+        }
+    });
+
+    </script>
+</body>
+</html>
