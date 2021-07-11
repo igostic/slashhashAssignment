@@ -46,7 +46,7 @@
           var countryUrls = data;
           $("#summernote").summernote({
             height: 300,
-            hintDirection: "top",
+            hintDirection: "bottom",
             hint: [
               {
                 search: function (keyword, callback) {
@@ -85,7 +85,6 @@
 
         function saveFile(file) {
           console.log(file);
-
           data = new FormData();
           data.append("file", file);
 
@@ -101,6 +100,10 @@
               var imgPath = url.name + "." + url.ext;
               var img = $("<img src='/uploaded/" + imgPath + "'>")[0];
               $summernote.summernote("insertNode", img);
+              if (data) {
+                return `${file}`;
+              }
+              return "";
             },
           });
         }
